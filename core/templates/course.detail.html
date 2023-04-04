@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-3">
+        <img {% if object.photo %}
+             src="{{ object.photo.url }}"
+             {% else %}
+             src="http://via.placeholder.com/400x100"
+             {% endif %}
+             width="400px" height="100px" class="card-img-top" alt="poster"
+        >
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ object.title }}</h5>
+                {% if course in user.course.all %}
+                    <a href="students/" class="btn btn-primary">Student</a>
+                {% endif %}
+            </div>
+
+            <p class="card-text text-muted">{{ object.category }}</p>
+            <p class="card-text text-muted">{{ object.date_end }}</p>
+            <p class="card-text">{{ object.description|safe }}</p>
+
+            {% if lectures %}
+            <ul class="list-group list-group-flush">
+                {% for lecture in lectures %}
+                <li class="list-group-item">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ lecture.title }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <img {% if lecture.photo %}
+                                 src="{{ lecture.photo.url }}"
+                                 {% else %}
+                                 src="http://via.placeholder.com/400x100"
+                                 {% endif %}
+                                 width="200px" height="100px" class="card-img-top" alt="poster"
+                            >
+                            <p class="card-text">{{ lecture.description|safe|truncatewords:10 }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="lecture/{{ lecture.id }}" class="btn btn-primary">View more</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+            {% if course in user.course.all %}
+                <div class="card-footer">
+                    <h3>Comments</h3>
+                    {% if comments %}
+                        {% include 'includes/comments.html' %}
+                    {% endif %}
+                    <form action="add-comment/" method="POST">{% csrf_token %}
+                        <label for="comment" class="mb-2">Comment</label>
+                        <textarea name="comment" class="form-control mb-3" required id="comment"></textarea>
+                        <button class="btn btn-outline-primary" type="submit">Send</button>
+                    </form>
+                </div>
+            {% else %}
+                <h3 class="m-3 text-warning">You not subscribe at this course</h3>
+            {% endif %}
+    </div>
+</div>
+{% endblock %}

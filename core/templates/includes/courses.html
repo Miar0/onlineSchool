@@ -1,0 +1,30 @@
+{% for object in page_obj %}
+    {% if object.is_enabled and object.category.is_enabled %}
+        <div class="col-4">
+            <div class="card">
+                <img {% if object.photo %}
+                        src="{{ object.photo.url }}"
+                     {% else %}
+                        src="http://via.placeholder.com/400x100"
+                     {% endif %}
+                    width="400px" height="100px" class="card-img-top" alt="poster"
+                >
+                <div class="card-body">
+                    <h2 class="card-title">{{ object.title|capfirst}}</h2>
+                    <h4 class="card-title text-muted">{{ object.category|capfirst }}</h4>
+                    <p>
+                        {{ object.description|safe|truncatewords:10 }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text">Price: {{ object.price }} UAH</p>
+                    <a href="/course/{{ object.id }}/" class="btn btn-primary" style="width: 100%">Detail</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h3>No courses yet</h3>
+    {% endif %}
+{% empty %}
+        <h3>No courses yet</h3>
+{% endfor %}

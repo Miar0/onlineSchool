@@ -1,0 +1,14 @@
+{% for comment in comments %}
+    <div class="d-flex my-3 p-3 border border-dark">
+        <img style="width: 60px; height: 60px"
+             {% if comment.user.avatar %}
+                src="{{ comment.user.avatar.url }}"
+             {% endif %} class="align-self-start me-4 rounded-circle" alt="avatar"
+        >
+
+        <div class="d-flex-col">
+            <h5>{{ comment.user }}</h5>
+            <p>{{ comment.message }}</p>
+        </div>
+    </div>
+{% endfor %}
